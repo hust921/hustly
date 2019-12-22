@@ -43,5 +43,20 @@ fn main() {
                 .long("all")
                 .help("Install for all users on system"),
         )
+        .subcommand(
+            SubCommand::with_name("install")
+                .about("Install environment/dependency")
+                .arg(
+                    Arg::with_name("module")
+                        .multiple(true)
+                        .required(true)
+                        .takes_value(true),
+                ),
+        )
         .get_matches();
+
+    println!(
+        "SubCommand arguments: {:?}",
+        arguments.subcommand_matches("install")
+    );
 }

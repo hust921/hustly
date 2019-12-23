@@ -4,8 +4,14 @@ extern crate clap;
 use clap::{App, Arg, SubCommand};
 
 mod modules;
+use modules::modules::{ModuleCollection, ZshModule, ModuleOperation};
 
 fn main() {
+    let mod_col = ModuleCollection { modules: vec![
+        Box::new(ZshModule::new()),
+    ]};
+
+    let _ = mod_col.operation(ModuleOperation::Install);
 
     //modules::add_module(Zsh::new());
     let arguments = App::new("hustly dotfiles installer")
@@ -44,7 +50,7 @@ fn main() {
                         .multiple(true)
                         .required(true)
                         .takes_value(true)
-                        .value_names(modules::names)
+                        //.value_names(modules::names)
                 )
         )
         .get_matches();

@@ -1,56 +1,59 @@
 pub mod modules {
+    pub trait Module {
+        fn operation(&self, _ : ModuleOperation) -> ModuleResult;
+        fn name(&self) -> String;
+    }
+
+    #[allow(dead_code)]
+    pub struct ZshModule {
+        links : Vec<(String, String)>,
+        deps  : Vec<String>,
+    }
+
+    impl ZshModule {
+        pub fn new() -> ZshModule {
+            ZshModule { links: vec![], deps: vec![] }
+        }
+    }
+
+    impl Module for ZshModule {
+        fn name(&self) -> String {
+            return String::from("ZSH");
+        }
+
+        fn operation(&self, op : ModuleOperation) -> ModuleResult {
+            return ModuleResult { operation: op, module_name: self.name(), result: Ok(()) };
+        }
+    }
+
+    #[derive(Copy, Clone)]
+    #[allow(dead_code)]
+    pub enum ModuleOperation {
+        Install,
+        Uninstall,
+        Update,
+        Check,
+        Test,
+    }
+
+    #[allow(dead_code)]
+    pub struct ModuleResult {
+        operation : ModuleOperation,
+        module_name : String,
+        result : Result<(), String>,
+    }
+
     pub struct ModuleCollection {
-        names : Vec<Module>,
+        pub modules : Vec<Box<dyn Module>>,
     }
 
     impl ModuleCollection {
-        pub fn new() -> ModuleCollection {
-            ModuleCollection {
-                names: vec![]
-            } 
-        }
-
-        pub fn add(&self, module : Module) {
-            self.names.append(module);
-        }
-
-        pub fn remove(&self, module : Module) {
-            self.names.remove_item(module);
-        }
-
-        pub fn get_module(&self, name : String) -> Option<Module> {
-            for m in self.names.into_iter() {
-                if m.name == name {
-                    return Some(m);
-                }
+        pub fn operation(&self, operation : ModuleOperation) -> Vec<ModuleResult> {
+            let mut results = vec![];
+            for module in self.modules.iter() {
+                results.push(module.operation(operation));
             }
-            return None;
+            results
         }
-    }
-
-    pub struct Module {
-        pub name : String,
-        pub deps : Vec<String>,
-    }
-
-    pub trait Operations {
-        fn install() -> bool {
-            return false;
-        }
-
-        fn uninstall() -> bool {
-            return false;
-        }
-
-        fn check() -> bool {
-            return false;
-        }
-
-        fn test() -> bool {
-            return false;
-        }
-    }
-
-    pub fn add_module(module : Module) {
     }
 }

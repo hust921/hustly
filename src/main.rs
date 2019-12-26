@@ -4,7 +4,10 @@ extern crate clap;
 use clap::{App, Arg, SubCommand};
 
 mod modules;
-use modules::modules::{ModuleCollection, ZshModule, ModuleOperation};
+mod zshmodule;
+
+use modules::{ModuleCollection, ModuleOperation};
+use zshmodule::ZshModule;
 
 fn main() {
     let mod_col = ModuleCollection { modules: vec![

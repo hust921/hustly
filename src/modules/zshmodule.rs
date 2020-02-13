@@ -1,6 +1,4 @@
-mod modules;
-
-use modules::{ModuleCollection, ModuleOperation};
+use super::{ModuleOperation, Module, ModuleResult};
 
 pub struct ZshModule {
     links : Vec<(String, String)>,

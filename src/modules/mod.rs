@@ -1,3 +1,6 @@
+pub use self::zshmodule::ZshModule;
+mod zshmodule;
+
 pub trait Module {
     fn operation(&self, _ : ModuleOperation) -> ModuleResult;
     fn name(&self) -> String;
